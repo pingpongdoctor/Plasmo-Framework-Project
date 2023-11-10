@@ -21,12 +21,15 @@ export default async function handler(
 
   connectMongoDB();
   try {
-    const data: TranslateData = req.body;
-    const translatedText: string = await translateFunc(
-      data.text,
-      data.from,
-      data.to
-    );
+    const { text, from, to }: TranslateData = req.body;
+
+    if (!text || !from || !to) {
+      return res.status(400).json({
+        message: "Required data is missing in the request body",
+      });
+    }
+
+    const translatedText: string = await translateFunc(text, from, to);
     res.status(200).json({
       message: translatedText,
     });
@@ -35,6 +38,7 @@ export default async function handler(
     res.status(405).json({
       message: `${error}`,
     });
+  } finally {
+    disconnectMongoDB();
   }
-  disconnectMongoDB();
 }
