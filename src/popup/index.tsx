@@ -1,7 +1,7 @@
-import { Main } from "@/components/main";
+import { ContentComponent } from "@/components/ContentComponent";
 
 function IndexPopup() {
-  return <Main />;
+  return <ContentComponent />;
 }
 
 export default IndexPopup;
