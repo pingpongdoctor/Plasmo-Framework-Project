@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main className={`${inter.variable} ${roboto_mono.variable}`}>
+    <main className={`${inter.className} ${roboto_mono.variable}`}>
       <Component {...pageProps} />;
     </main>
   );
