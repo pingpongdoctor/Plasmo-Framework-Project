@@ -17,15 +17,25 @@ export default async function handler(
 
   try {
     connectMongoDB();
-    const { translation }: { translation: string } = req.body;
+    const {
+      from,
+      to,
+      originalContent,
+      translatedContent,
+    }: DataToAddTranslation = req.body;
 
-    if (!translation) {
+    if (!from || !to || !originalContent || !translatedContent) {
       return res.status(400).json({
         message: "Required data is missing in the request body",
       });
     }
 
-    const addedTranslation = Translation.create({ content: translation });
+    const addedTranslation = Translation.create({
+      from,
+      to,
+      originalContent,
+      translatedContent,
+    });
     console.log(addedTranslation);
     res.status(201).json({ message: "New translation has been added" });
   } catch (error) {

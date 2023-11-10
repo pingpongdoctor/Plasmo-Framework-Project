@@ -21,7 +21,7 @@ export default async function handler(
 
   try {
     connectMongoDB();
-    const { text, from, to }: TranslateData = req.body;
+    const { text, from, to }: DataToRetrieveTranslation = req.body;
 
     if (!text || !from || !to) {
       return res.status(400).json({
