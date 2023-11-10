@@ -19,8 +19,8 @@ export default async function handler(
     });
   }
 
-  connectMongoDB();
   try {
+    connectMongoDB();
     const { text, from, to }: TranslateData = req.body;
 
     if (!text || !from || !to) {
@@ -35,8 +35,8 @@ export default async function handler(
     });
   } catch (error) {
     console.log(error);
-    res.status(405).json({
-      message: `${error}`,
+    res.status(500).json({
+      message: `Internal Server Error: ${error}`,
     });
   } finally {
     disconnectMongoDB();

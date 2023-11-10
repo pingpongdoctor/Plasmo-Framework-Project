@@ -6,7 +6,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/popup/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/popup/index.tsx",
   ],
   theme: {
     extend: {
@@ -15,6 +15,7 @@ const config: Config = {
       },
     },
   },
+  prefix: "plasmo-",
   plugins: [],
 };
 export default config;

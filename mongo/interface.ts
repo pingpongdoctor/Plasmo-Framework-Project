@@ -1,3 +1,6 @@
 export interface Translations {
-  content: String;
+  from: string;
+  to: string;
+  originalContent: string;
+  translatedContent: string;
 }

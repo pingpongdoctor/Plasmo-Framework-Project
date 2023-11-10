@@ -1,11 +1,8 @@
 import "@/_styles/globals.css";
-
 function IndexPopup() {
   return (
-    <div>
-      <h3 className="font-roboto text-red-500">
-        Translate Text Chrome Extension
-      </h3>
+    <div className="plasmo-w-[250px] plasmo-h-[300px] plasmo-flex plasmo-flex-col plasmo-items-center">
+      <h3 className=" plasmo-text-center">Translate Text Chrome Extension</h3>
     </div>
   );
 }

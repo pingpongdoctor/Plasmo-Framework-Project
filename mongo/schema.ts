@@ -3,7 +3,10 @@ import { Translations } from "./interface";
 
 const translationSchema = new Schema<Translations>(
   {
-    content: { type: String, required: true },
+    from: { type: String, required: true },
+    to: { type: String, required: true },
+    originalContent: { type: String, required: true },
+    translatedContent: { type: String, required: true },
   },
   {
     timestamps: true,

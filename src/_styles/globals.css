@@ -8,15 +8,15 @@
   }
 
   h1 {
-    @apply text-4xl font-bold;
+    @apply plasmo-text-4xl plasmo-font-bold;
   }
 
   h2 {
-    @apply text-3xl font-semibold;
+    @apply plasmo-text-3xl plasmo-font-semibold;
   }
 
   h3 {
-    @apply text-2xl font-semibold;
+    @apply plasmo-text-xl plasmo-font-semibold;
   }
 }
 
