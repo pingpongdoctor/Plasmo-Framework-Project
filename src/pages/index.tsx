@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import { Main } from "@/components/main";
+import { ContentComponent } from "@/components/ContentComponent";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  return <Main name="App" />;
+  return <ContentComponent name="App" />;
 }

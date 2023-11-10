@@ -4,7 +4,7 @@ interface Props {
   name?: string;
 }
 
-export function Main({ name = "Extension" }: Props) {
+export function ContentComponent({ name = "Extension" }: Props) {
   const [data, setData] = useState("");
 
   return (
