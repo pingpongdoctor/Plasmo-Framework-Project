@@ -1,8 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import {
-  connectMongoDB,
-  disconnectMongoDB,
-} from "../../../../lib/databaseConnect";
 import { translateFunc } from "../../../../lib/translateFunction";
 
 interface Data {
@@ -20,7 +16,6 @@ export default async function handler(
   }
 
   try {
-    connectMongoDB();
     const { text, from, to }: DataToRetrieveTranslation = req.body;
 
     if (!text || !from || !to) {
@@ -38,7 +33,5 @@ export default async function handler(
     res.status(500).json({
       message: `Internal Server Error: ${error}`,
     });
-  } finally {
-    disconnectMongoDB();
   }
 }

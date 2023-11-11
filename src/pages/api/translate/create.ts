@@ -16,7 +16,8 @@ export default async function handler(
   }
 
   try {
-    connectMongoDB();
+    await connectMongoDB();
+
     const {
       from,
       to,
@@ -30,13 +31,12 @@ export default async function handler(
       });
     }
 
-    const addedTranslation = Translation.create({
+    await Translation.create({
       from,
       to,
       originalContent,
       translatedContent,
     });
-    console.log(addedTranslation);
     res.status(201).json({ message: "New translation has been added" });
   } catch (error) {
     console.log(error);
