@@ -1,8 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import {
-  connectMongoDB,
-  disconnectMongoDB,
-} from "../../../../lib/databaseConnect";
 import { translateFunc } from "../../../../lib/translateFunction";
 
 interface Data {
@@ -19,22 +15,23 @@ export default async function handler(
     });
   }
 
-  connectMongoDB();
   try {
-    const data: TranslateData = req.body;
-    const translatedText: string = await translateFunc(
-      data.text,
-      data.from,
-      data.to
-    );
+    const { text, from, to }: DataToRetrieveTranslation = req.body;
+
+    if (!text || !from || !to) {
+      return res.status(400).json({
+        message: "Required data is missing in the request body",
+      });
+    }
+
+    const translatedText: string = await translateFunc(text, from, to);
     res.status(200).json({
       message: translatedText,
     });
   } catch (error) {
     console.log(error);
-    res.status(405).json({
-      message: `${error}`,
+    res.status(500).json({
+      message: `Internal Server Error: ${error}`,
     });
   }
-  disconnectMongoDB();
 }

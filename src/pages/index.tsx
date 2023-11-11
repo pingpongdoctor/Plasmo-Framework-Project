@@ -1,8 +1,9 @@
-import { Inter } from "next/font/google";
-import { ContentComponent } from "@/components/ContentComponent";
-
-const inter = Inter({ subsets: ["latin"] });
-
 export default function Home() {
-  return <ContentComponent name="App" />;
+  return (
+    <div>
+      <h1 className="plasmo-text-red-400 plasmo-font-roboto">
+        Translate Text Chrome Extension
+      </h1>
+    </div>
+  );
 }
