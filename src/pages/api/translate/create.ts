@@ -3,7 +3,7 @@ import {
   connectMongoDB,
   disconnectMongoDB,
 } from "../../../../lib/databaseConnect";
-import { Translation } from "../../../../mongo/schema";
+import { TranslationModel } from "../../../../mongo/schema";
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,7 +31,7 @@ export default async function handler(
       });
     }
 
-    await Translation.create({
+    await TranslationModel.create({
       from,
       to,
       originalContent,
