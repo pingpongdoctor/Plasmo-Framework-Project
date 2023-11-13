@@ -5,7 +5,9 @@ const userSchema = new Schema<User>(
   {
     name: { type: String, required: true },
     googleId: { type: String, required: true },
-    translations: [{ type: Schema.Types.ObjectId, ref: "Translation" }],
+    translations: [
+      { type: Schema.Types.ObjectId, ref: "Translation", default: [] },
+    ],
   },
   {
     timestamps: true,
@@ -18,7 +20,7 @@ const translationSchema = new Schema<Translation>(
     to: { type: String, required: true },
     originalContent: { type: String, required: true },
     translatedContent: { type: String, required: true },
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
   {
     timestamps: true,
