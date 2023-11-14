@@ -2,7 +2,7 @@ export default async function getTranslation(
   from: "en" | "fr" | "es",
   to: "en" | "fr" | "es",
   text: string
-) {
+): Promise<string> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_AUTH0_BASE_URL}/api/translation/translate`,
     {
@@ -14,10 +14,10 @@ export default async function getTranslation(
     }
   );
   if (!res.ok) {
-    return null;
+    throw Error("Error getting translation");
   }
 
-  const translation = await res.json();
+  const translation: { message: string } = await res.json();
 
   return translation.message;
 }

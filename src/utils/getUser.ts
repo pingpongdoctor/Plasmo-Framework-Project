@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@auth0/nextjs-auth0";
+import { User } from "../../mongo/interface";
 
 export default async function getUser(
   req: NextApiRequest,
   res: NextApiResponse
-) {
+): Promise<(User & { _id: string }) | null> {
   const session = await getSession(req, res);
 
   if (!session) {

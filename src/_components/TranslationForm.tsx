@@ -1,14 +1,16 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import getTranslation from "@/utils/getTranslation";
+import saveTranslation from "@/utils/saveTranslation";
+import { useRouter } from "next/router";
 
 export default function TranslationForm() {
+  const router = useRouter();
   const [text, setText] = useState<string>("");
   const [from, setFrom] = useState<"en" | "fr" | "es">("en");
   const [to, setTo] = useState<"en" | "fr" | "es">("fr");
   const [translatedText, setTranslatedText] = useState<string>("");
 
   const handleSubmit = async function (e: FormEvent<HTMLFormElement>) {
-    console.log("running");
     e.preventDefault();
     try {
       if (!text) {
@@ -37,6 +39,7 @@ export default function TranslationForm() {
             className="plasmo-border plasmo-border-black focus:plasmo-outline-none plasmo-rounded-md"
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
               setText(e.target.value);
+              setTranslatedText("");
             }}
           />
         </label>
@@ -90,8 +93,14 @@ export default function TranslationForm() {
       <div className="plasmo-mt-[2rem]">
         <p className="plasmo-font-bold">Here is translated text</p>
         {translatedText && <p>{translatedText}</p>}
-        {translatedText && (
-          <button className="plasmo-text-blue-400 plasmo-font-semibold plasmo-bg-black plasmo-mt-[1rem] plasmo-p-[5px]">
+        {translatedText && text && (
+          <button
+            className="plasmo-text-blue-400 plasmo-font-semibold plasmo-bg-black plasmo-mt-[1rem] plasmo-p-[5px]"
+            onClick={async () => {
+              await saveTranslation(from, to, text, translatedText);
+              router.push("/");
+            }}
+          >
             Save this translation
           </button>
         )}

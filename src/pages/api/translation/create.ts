@@ -21,15 +21,15 @@ export default withApiAuthRequired(async function handler(
   try {
     await connectMongoDB();
 
-    const { from, to, originalContent, translatedContent, userId } = req.body;
+    const { from, to, originalContent, translatedContent } = req.body;
 
-    if (!from || !to || !originalContent || !translatedContent || !userId) {
+    if (!from || !to || !originalContent || !translatedContent) {
       return res.status(400).json({
         message: "Required data is missing in the request body",
       });
     }
 
-    const user: User & { _id: string } = await getUser(req, res);
+    const user: (User & { _id: string }) | null = await getUser(req, res);
 
     if (!user) {
       return res.status(404).json({ message: "user is not found" });
@@ -40,18 +40,13 @@ export default withApiAuthRequired(async function handler(
       to,
       originalContent,
       translatedContent,
-      user: userId,
+      user: user._id,
     });
 
-    console.log(newTranslation);
-
-    const updatedUser = await UserModel.findOneAndUpdate(
-      { _id: userId },
-      { $push: { translations: newTranslation._id } },
-      { new: true }
+    await UserModel.findOneAndUpdate(
+      { _id: user._id },
+      { $push: { translations: newTranslation._id } }
     );
-
-    console.log(updatedUser);
 
     res
       .status(201)
@@ -59,7 +54,5 @@ export default withApiAuthRequired(async function handler(
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: `Internal Server Error: ${error}` });
-  } finally {
-    disconnectMongoDB();
   }
 });
