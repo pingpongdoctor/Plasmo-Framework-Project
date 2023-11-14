@@ -5,6 +5,7 @@ import {
   connectMongoDB,
   disconnectMongoDB,
 } from "../../../../lib/databaseConnect";
+import { TranslationModel } from "../../../../mongo/schema";
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,7 +29,7 @@ export default async function handler(
     await connectMongoDB();
     const user: (User & { _id: string }) | null = await UserModel.findOne({
       auth0Id,
-    });
+    }).populate({ path: "translations", model: TranslationModel });
 
     if (!user) {
       return res.status(404).json({
