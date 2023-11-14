@@ -20,7 +20,7 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   }
-  console.log(session);
+
   return {
     props: {},
   };
