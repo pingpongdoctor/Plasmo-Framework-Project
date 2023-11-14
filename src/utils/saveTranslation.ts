@@ -5,7 +5,7 @@ export default async function saveTranslation(
   translatedContent: string
 ): Promise<{ message: string }> {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_AUTH0_BASE_URL}/api/translation/create`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/translation/create`,
     {
       method: "POST",
       headers: {

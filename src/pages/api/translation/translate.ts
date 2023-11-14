@@ -1,15 +1,37 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { translateFunc } from "../../../../lib/translateFunction";
-import { withApiAuthRequired } from "@auth0/nextjs-auth0";
+import Cors from "cors";
+
+const cors = Cors({
+  origin: "*",
+});
+
+function runMiddleware(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  fn: Function
+) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+
+      return resolve(result);
+    });
+  });
+}
 
 interface Data {
   message: string;
 }
 
-export default withApiAuthRequired(async function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  await runMiddleware(req, res, cors);
+
   if (req.method != "POST") {
     return res.status(405).json({
       message: "Unable to send " + req.method + " request to server...",
@@ -35,4 +57,4 @@ export default withApiAuthRequired(async function handler(
       message: `Internal Server Error: ${error}`,
     });
   }
-});
+}

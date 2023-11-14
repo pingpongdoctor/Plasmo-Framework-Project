@@ -1,5 +1,4 @@
 import Link from "next/link";
-import type { GetServerSideProps } from "next";
 import getUser from "../utils/getUser";
 import { Translation } from "../../mongo/interface";
 import TranslationForm from "@/_components/TranslationForm";
