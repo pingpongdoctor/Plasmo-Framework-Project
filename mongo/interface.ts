@@ -10,6 +10,7 @@ export interface Translation {
 
 export interface User {
   name: string;
-  googleId: string;
+  authId: string;
+  email: string;
   translations: Types.ObjectId[];
 }
