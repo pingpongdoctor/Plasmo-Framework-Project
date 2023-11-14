@@ -6,8 +6,9 @@ import {
 import { TranslationModel, UserModel } from "../../../../mongo/schema";
 import getUser from "../../../utils/getUser";
 import { User } from "../../../../mongo/interface";
+import { withApiAuthRequired } from "@auth0/nextjs-auth0";
 
-export default async function handler(
+export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -61,4 +62,4 @@ export default async function handler(
   } finally {
     disconnectMongoDB();
   }
-}
+});

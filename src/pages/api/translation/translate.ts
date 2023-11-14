@@ -1,11 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { translateFunc } from "../../../../lib/translateFunction";
+import { withApiAuthRequired } from "@auth0/nextjs-auth0";
 
 interface Data {
   message: string;
 }
 
-export default async function handler(
+export default withApiAuthRequired(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
@@ -34,4 +35,4 @@ export default async function handler(
       message: `Internal Server Error: ${error}`,
     });
   }
-}
+});
