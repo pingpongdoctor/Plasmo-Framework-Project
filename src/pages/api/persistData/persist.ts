@@ -14,6 +14,8 @@ export default async function handler(
   try {
     const { email, name, auth0Id } = req.body;
 
+    console.log(email, name, auth0Id);
+
     if (!email || !name || !auth0Id) {
       return res.status(400).json({
         message: "Required data is missing in the request body",
