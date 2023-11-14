@@ -33,9 +33,7 @@ export const getServerSideProps = async (context: any) => {
 export default function Home() {
   return (
     <div>
-      <h1 className="plasmo-text-red-400 plasmo-font-roboto">
-        Translate Text Chrome Extension
-      </h1>
+      <h1 className="plasmo-text-red-400 plasmo-font-roboto">Translate Text</h1>
       <Link href={`/api/auth/logout?returnTo=http://localhost:1947`}>
         Logout
       </Link>
