@@ -4,7 +4,7 @@ import { Translation, User } from "./interface";
 const userSchema = new Schema<User>(
   {
     name: { type: String, required: true },
-    authId: { type: String, required: true },
+    auth0Id: { type: String, required: true },
     email: { type: String, required: true },
     translations: [
       { type: Schema.Types.ObjectId, ref: "Translation", default: [] },
