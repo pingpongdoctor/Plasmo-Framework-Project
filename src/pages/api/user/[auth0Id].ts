@@ -1,11 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { UserModel } from "../../../../mongo/schema";
-import { User } from "../../../../mongo/interface";
+import { UserModel, TranslationModel } from "../../../../mongo/schema";
 import {
   connectMongoDB,
   disconnectMongoDB,
 } from "../../../../lib/databaseConnect";
-import { TranslationModel } from "../../../../mongo/schema";
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,7 +25,7 @@ export default async function handler(
 
   try {
     await connectMongoDB();
-    const user: (User & { _id: string }) | null = await UserModel.findOne({
+    const user = await UserModel.findOne({
       auth0Id,
     }).populate({ path: "translations", model: TranslationModel });
 
@@ -37,9 +35,7 @@ export default async function handler(
       });
     }
 
-    return res.status(200).json({
-      user,
-    });
+    return res.status(200).json(user);
   } catch (error) {
     console.log(error);
     res.status(500).json({

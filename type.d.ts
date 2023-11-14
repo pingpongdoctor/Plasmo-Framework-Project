@@ -10,3 +10,11 @@ interface DataToAddTranslation {
   originalContent: string;
   translatedContent: string;
 }
+
+interface UserWithPopulatedTransactions {
+  _id: string;
+  name: string;
+  auth0Id: string;
+  email: string;
+  translations: (Translation & { _id: string })[];
+}

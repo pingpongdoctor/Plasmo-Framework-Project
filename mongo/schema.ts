@@ -28,9 +28,9 @@ const translationSchema = new Schema<Translation>(
   }
 );
 
-export const TranslationModel = mongoose.model(
-  "Translation",
-  translationSchema
-);
+export const TranslationModel =
+  mongoose.models.TranslationModel ||
+  mongoose.model("Translation", translationSchema);
 
-export const UserModel = mongoose.model("User", userSchema);
+export const UserModel =
+  mongoose.models.UserModel || mongoose.model("User", userSchema);
