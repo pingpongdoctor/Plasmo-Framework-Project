@@ -10,7 +10,7 @@ export interface Translation {
 
 export interface User {
   name: string;
-  authId: string;
+  auth0Id: string;
   email: string;
   translations: Types.ObjectId[];
 }

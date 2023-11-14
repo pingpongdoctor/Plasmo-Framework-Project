@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { UserModel } from "../../../../mongo/schema";
+import {
+  connectMongoDB,
+  disconnectMongoDB,
+} from "../../../../lib/databaseConnect";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,6 +16,7 @@ export default async function handler(
   }
 
   try {
+    await connectMongoDB();
     const { email, name, auth0Id } = req.body;
 
     console.log(email, name, auth0Id);
@@ -41,5 +46,7 @@ export default async function handler(
     res.status(500).json({
       message: `Internal Server Error: ${error}`,
     });
+  } finally {
+    disconnectMongoDB();
   }
 }
