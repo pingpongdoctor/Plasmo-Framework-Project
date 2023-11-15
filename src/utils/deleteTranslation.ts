@@ -1,4 +1,6 @@
-export default async function deleteTranslation(translationId: string) {
+export default async function deleteTranslation(
+  translationId: string
+): Promise<void> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/translation/${translationId}`,
@@ -13,9 +15,8 @@ export default async function deleteTranslation(translationId: string) {
     if (!res.ok) {
       throw new Error("Error deleting translation");
     }
-
-    console.log(await res.json());
   } catch (error) {
     console.log(error);
+    throw new Error("Error in deleting translation function");
   }
 }

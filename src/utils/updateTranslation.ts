@@ -4,7 +4,7 @@ export default async function updateTranslation(
   originalContent: string,
   translatedContent: string,
   translationId: string
-) {
+): Promise<void> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/translation/${translationId}`,
@@ -20,9 +20,8 @@ export default async function updateTranslation(
     if (!res.ok) {
       throw new Error("Error deleting translation");
     }
-
-    console.log(await res.json());
   } catch (error) {
     console.log(error);
+    throw new Error("Error in updating translation function");
   }
 }
