@@ -92,7 +92,11 @@ export default function TranslationForm() {
 
       <div className="plasmo-mt-[2rem]">
         <p className="plasmo-font-bold">Here is translated text</p>
-        {translatedText && <p>{translatedText}</p>}
+        {translatedText && (
+          <p className="plasmo-text-red-400 plasmo-font-semibold">
+            {translatedText}
+          </p>
+        )}
         {translatedText && text && (
           <button
             className="plasmo-text-blue-400 plasmo-font-semibold plasmo-bg-black plasmo-mt-[1rem] plasmo-p-[5px]"

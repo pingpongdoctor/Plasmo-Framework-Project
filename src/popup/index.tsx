@@ -43,7 +43,15 @@ function IndexPopup() {
   }, [text]);
 
   return (
-    <div className="plasmo-flex plasmo-justify-between plasmo-items-center plasmo-p-[1rem] plasmo-w-[250px]">
+    <div className="plasmo-flex plasmo-flex-col plasmo-justify-between plasmo-items-center plasmo-p-[1rem] plasmo-w-[250px]">
+      <button
+        onClick={() => {
+          window.open(`${process.env.PLASMO_PUBLIC_BASE_URL}`, "_blank");
+        }}
+        className="plasmo-font-bold plasmo-text-white plasmo-bg-red-500 plasmo-rounded-md plasmo-p-1"
+      >
+        Sign in with Google
+      </button>
       <form
         className="plasmo-flex plasmo-flex-col plasmo-w-full"
         onSubmit={handleSubmit}
@@ -107,7 +115,11 @@ function IndexPopup() {
         >
           Here is translated text:
         </p>
-        {translatedText && <p className="plasmo-my-[1rem]">{translatedText}</p>}
+        {translatedText && (
+          <p className="plasmo-text-red-400 plasmo-font-semibold plasmo-my-[1rem]">
+            {translatedText}
+          </p>
+        )}
 
         <button
           className={`plasmo-text-blue-400 plasmo-font-semibold plasmo-bg-black plasmo-p-2 plasmo-rounded-md ${
