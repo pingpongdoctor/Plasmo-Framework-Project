@@ -33,17 +33,18 @@ export default function Home({
 }) {
   if (user) {
     return (
-      <div className="plasmo-flex plasmo-justify-between plasmo-px-[2rem]">
-        <div>
+      <div className="plasmo-px-[2rem]">
+        <div className="plasmo-flex plasmo-justify-between">
           <h1 className="plasmo-text-red-400 plasmo-font-roboto">
             Translate Text
           </h1>
-          <p className="plasmo-mb-4">Welcome back {user.name}</p>
-          <p className="plasmo-font-bold">Your translations are</p>
-          <TranslationList user={user} />
-          <TranslationForm />
+          <Link href={`/api/auth/logout`}>Logout</Link>
         </div>
-        <Link href={`/api/auth/logout`}>Logout</Link>
+
+        <p className="plasmo-mb-4">Welcome back {user.name}</p>
+        <p className="plasmo-font-bold">Your translations are</p>
+        <TranslationList user={user} />
+        <TranslationForm />
       </div>
     );
   }
