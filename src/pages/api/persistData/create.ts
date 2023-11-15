@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { UserModel } from "../../../../mongo/schema";
-import {
-  connectMongoDB,
-  disconnectMongoDB,
-} from "../../../../lib/databaseConnect";
+import { connectMongoDB } from "../../../../lib/databaseConnect";
 
 export default async function handler(
   req: NextApiRequest,
