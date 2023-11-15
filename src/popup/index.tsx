@@ -38,10 +38,6 @@ function IndexPopup() {
     }
   };
 
-  useEffect(() => {
-    console.log(text);
-  }, [text]);
-
   return (
     <div className="plasmo-flex plasmo-flex-col plasmo-justify-between plasmo-items-center plasmo-p-[1rem] plasmo-w-[250px]">
       <button
