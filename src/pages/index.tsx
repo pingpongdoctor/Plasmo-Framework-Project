@@ -1,8 +1,8 @@
 import Link from "next/link";
 import getUser from "../utils/getUser";
-import { Translation } from "../../mongo/interface";
 import TranslationForm from "@/_components/TranslationForm";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import TranslationList from "@/_components/TranslationList";
 
 export const getServerSideProps = withPageAuthRequired({
   async getServerSideProps(context: any) {
@@ -40,14 +40,7 @@ export default function Home({
           </h1>
           <p className="plasmo-mb-4">Welcome back {user.name}</p>
           <p className="plasmo-font-bold">Your translations are</p>
-          <ul>
-            {user &&
-              user.translations.map(
-                (translation: Translation & { _id: string }) => (
-                  <li key={translation._id}>{translation.translatedContent}</li>
-                )
-              )}
-          </ul>
+          <TranslationList user={user} />
           <TranslationForm />
         </div>
         <Link href={`/api/auth/logout`}>Logout</Link>
