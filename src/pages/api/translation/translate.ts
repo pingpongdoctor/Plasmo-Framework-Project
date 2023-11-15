@@ -1,14 +1,37 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import {
-  connectMongoDB,
-  disconnectMongoDB,
-} from "../../../../lib/databaseConnect";
-import { TranslationModel } from "../../../../mongo/schema";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { translateFunc } from "../../../../lib/translateFunction";
+import Cors from "cors";
+
+const cors = Cors({
+  origin: "*",
+});
+
+function runMiddleware(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  fn: Function
+) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+
+      return resolve(result);
+    });
+  });
+}
+
+interface Data {
+  message: string;
+}
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<Data>
 ) {
+  await runMiddleware(req, res, cors);
+
   if (req.method != "POST") {
     return res.status(405).json({
       message: "Unable to send " + req.method + " request to server...",
@@ -16,32 +39,22 @@ export default async function handler(
   }
 
   try {
-    await connectMongoDB();
+    const { text, from, to }: DataToRetrieveTranslation = req.body;
 
-    const {
-      from,
-      to,
-      originalContent,
-      translatedContent,
-    }: DataToAddTranslation = req.body;
-
-    if (!from || !to || !originalContent || !translatedContent) {
+    if (!text || !from || !to) {
       return res.status(400).json({
         message: "Required data is missing in the request body",
       });
     }
 
-    await TranslationModel.create({
-      from,
-      to,
-      originalContent,
-      translatedContent,
+    const translatedText: string = await translateFunc(text, from, to);
+    res.status(200).json({
+      message: translatedText,
     });
-    res.status(201).json({ message: "New translation has been added" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: `Internal Server Error: ${error}` });
-  } finally {
-    disconnectMongoDB();
+    res.status(500).json({
+      message: `Internal Server Error: ${error}`,
+    });
   }
 }

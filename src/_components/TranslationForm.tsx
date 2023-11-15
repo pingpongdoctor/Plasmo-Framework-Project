@@ -1,12 +1,16 @@
-import "@/_styles/globals.css";
-import { useState, useEffect } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import getTranslation from "@/utils/getTranslation";
+import saveTranslation from "@/utils/saveTranslation";
+import { useRouter } from "next/router";
 
-function IndexPopup() {
+export default function TranslationForm() {
+  const router = useRouter();
   const [text, setText] = useState<string>("");
   const [from, setFrom] = useState<"en" | "fr" | "es">("en");
   const [to, setTo] = useState<"en" | "fr" | "es">("fr");
   const [translatedText, setTranslatedText] = useState<string>("");
-  const handleSubmit = async function (e: React.FormEvent<HTMLFormElement>) {
+
+  const handleSubmit = async function (e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       if (!text) {
@@ -14,48 +18,17 @@ function IndexPopup() {
         return;
       }
 
-      const res = await fetch(
-        `${process.env.PLASMO_PUBLIC_BASE_URL}/api/translation/translate`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ from, to, text }),
-        }
-      );
-
-      if (!res.ok) {
-        throw Error("Error translating");
-      }
-
-      const translation: { message: string } = await res.json();
-      console.log(translation.message);
-      setTranslatedText(translation.message);
+      const translation = await getTranslation(from, to, text);
+      console.log(translation);
+      setTranslatedText(translation);
     } catch (error) {
       console.log(error);
       setText("");
     }
   };
-
-  useEffect(() => {
-    console.log(text);
-  }, [text]);
-
   return (
-    <div className="plasmo-flex plasmo-flex-col plasmo-justify-between plasmo-items-center plasmo-p-[1rem] plasmo-w-[250px]">
-      <button
-        onClick={() => {
-          window.open(`${process.env.PLASMO_PUBLIC_BASE_URL}`, "_blank");
-        }}
-        className="plasmo-font-bold plasmo-text-white plasmo-bg-red-500 plasmo-rounded-md plasmo-p-1"
-      >
-        Sign in with Google
-      </button>
-      <form
-        className="plasmo-flex plasmo-flex-col plasmo-w-full"
-        onSubmit={handleSubmit}
-      >
+    <div>
+      <form className="plasmo-flex plasmo-flex-col" onSubmit={handleSubmit}>
         <label
           htmlFor="inputText"
           className="plasmo-font-bold plasmo-flex plasmo-flex-col"
@@ -64,8 +37,9 @@ function IndexPopup() {
           <textarea
             id="inputText"
             className="plasmo-border plasmo-border-black focus:plasmo-outline-none plasmo-rounded-md"
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
               setText(e.target.value);
+              setTranslatedText("");
             }}
           />
         </label>
@@ -77,7 +51,7 @@ function IndexPopup() {
           From language:
           <select
             id="from"
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               setFrom(e.target.value as "en" | "fr" | "es");
             }}
             className="plasmo-border plasmo-border-black focus:plasmo-outline-none plasmo-rounded-md"
@@ -97,7 +71,7 @@ function IndexPopup() {
           <select
             id="to"
             className="plasmo-border plasmo-border-black focus:plasmo-outline-none plasmo-rounded-md"
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               setTo(e.target.value as "en" | "fr" | "es");
             }}
             defaultValue={"fr"}
@@ -108,30 +82,33 @@ function IndexPopup() {
           </select>
         </label>
 
-        <p
-          className={`plasmo-font-bold plasmo-mt-[1rem] ${
-            translatedText ? "" : "plasmo-mb-[1rem]"
-          }`}
-        >
-          Here is translated text:
-        </p>
-        {translatedText && (
-          <p className="plasmo-text-red-400 plasmo-font-semibold plasmo-my-[1rem]">
-            {translatedText}
-          </p>
-        )}
-
         <button
-          className={`plasmo-text-blue-400 plasmo-font-semibold plasmo-bg-black plasmo-p-2 plasmo-rounded-md ${
-            translatedText ? "plasmo-mb-[1rem]" : ""
-          }`}
+          className="plasmo-text-blue-400 plasmo-font-semibold plasmo-bg-black plasmo-mt-[1rem]"
           type="submit"
         >
           Translate now
         </button>
       </form>
+
+      <div className="plasmo-mt-[2rem]">
+        <p className="plasmo-font-bold">Here is translated text</p>
+        {translatedText && (
+          <p className="plasmo-text-red-400 plasmo-font-semibold">
+            {translatedText}
+          </p>
+        )}
+        {translatedText && text && (
+          <button
+            className="plasmo-text-blue-400 plasmo-font-semibold plasmo-bg-black plasmo-mt-[1rem] plasmo-p-[5px]"
+            onClick={async () => {
+              await saveTranslation(from, to, text, translatedText);
+              router.push("/");
+            }}
+          >
+            Save this translation
+          </button>
+        )}
+      </div>
     </div>
   );
 }
-
-export default IndexPopup;

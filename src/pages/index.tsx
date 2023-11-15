@@ -1,42 +1,57 @@
 import Link from "next/link";
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import getUser from "../utils/getUser";
 import { Translation } from "../../mongo/interface";
-import { getSession, Session } from "@auth0/nextjs-auth0";
+import TranslationForm from "@/_components/TranslationForm";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
-interface UserData {
-  _id: string;
-  name: string;
-  translations: Translation & { _id: string };
-}
+export const getServerSideProps = withPageAuthRequired({
+  async getServerSideProps(context: any) {
+    const user: UserWithPopulatedTransactions | null = await getUser(
+      context.req,
+      context.res
+    );
 
-export const getServerSideProps = async (context: any) => {
-  const session = await getSession(context.req, context.res);
+    if (!user) {
+      return {
+        redirect: {
+          destination: "/api/auth/logout",
+          permanent: false,
+        },
+      };
+    }
 
-  if (!session) {
     return {
-      redirect: {
-        destination: `/api/auth/login`,
-        permanent: false,
-      },
+      props: { user },
     };
+  },
+});
+
+export default function Home({
+  user,
+}: {
+  user: UserWithPopulatedTransactions;
+}) {
+  if (user) {
+    return (
+      <div className="plasmo-flex plasmo-justify-between plasmo-px-[2rem]">
+        <div>
+          <h1 className="plasmo-text-red-400 plasmo-font-roboto">
+            Translate Text
+          </h1>
+          <p className="plasmo-mb-4">Welcome back {user.name}</p>
+          <p className="plasmo-font-bold">Your translations are</p>
+          <ul>
+            {user &&
+              user.translations.map(
+                (translation: Translation & { _id: string }) => (
+                  <li key={translation._id}>{translation.translatedContent}</li>
+                )
+              )}
+          </ul>
+          <TranslationForm />
+        </div>
+        <Link href={`/api/auth/logout`}>Logout</Link>
+      </div>
+    );
   }
-  console.log(session);
-  return {
-    props: {},
-  };
-};
-
-// satisfies GetServerSideProps<{
-//   userData: UserData;
-// }>;
-
-export default function Home() {
-  return (
-    <div>
-      <h1 className="plasmo-text-red-400 plasmo-font-roboto">Translate Text</h1>
-      <Link href={`/api/auth/logout?returnTo=http://localhost:1947`}>
-        Logout
-      </Link>
-    </div>
-  );
 }
