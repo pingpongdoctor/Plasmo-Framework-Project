@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
 
 export interface Translation {
-  from: string;
-  to: string;
+  from: "en" | "es" | "fr";
+  to: "en" | "es" | "fr";
   originalContent: string;
   translatedContent: string;
   user: Types.ObjectId;

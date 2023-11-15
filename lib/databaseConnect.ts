@@ -10,13 +10,3 @@ export const connectMongoDB = async () => {
     console.log(error);
   }
 };
-
-//DISCONNECT DB FUNCTION
-export const disconnectMongoDB = async () => {
-  try {
-    await mongoose.disconnect();
-    console.log("DISCONNECTED FROM MONGODB");
-  } catch (error) {
-    console.log(error);
-  }
-};

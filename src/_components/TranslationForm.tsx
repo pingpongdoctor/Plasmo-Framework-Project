@@ -17,9 +17,7 @@ export default function TranslationForm() {
         alert("Please insert text");
         return;
       }
-
       const translation = await getTranslation(from, to, text);
-      console.log(translation);
       setTranslatedText(translation);
     } catch (error) {
       console.log(error);

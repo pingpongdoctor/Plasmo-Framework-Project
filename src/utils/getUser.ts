@@ -6,21 +6,26 @@ export default async function getUser(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<(User & { _id: string }) | null> {
-  const session = await getSession(req, res);
+  try {
+    const session = await getSession(req, res);
 
-  if (!session) {
-    return null;
+    if (!session) {
+      return null;
+    }
+
+    const response = await fetch(
+      `${process.env.AUTH0_BASE_URL}/api/user/${session.user.sub}`
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const user = await response.json();
+
+    return user;
+  } catch (error) {
+    console.log(error);
+    throw Error("Error in getting user function");
   }
-
-  const response = await fetch(
-    `${process.env.AUTH0_BASE_URL}/api/user/${session.user.sub}`
-  );
-
-  if (!response.ok) {
-    return null;
-  }
-
-  const user = await response.json();
-
-  return user;
 }

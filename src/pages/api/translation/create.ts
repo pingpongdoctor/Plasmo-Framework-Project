@@ -1,8 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  connectMongoDB,
-  disconnectMongoDB,
-} from "../../../../lib/databaseConnect";
+import { connectMongoDB } from "../../../../lib/databaseConnect";
 import { TranslationModel, UserModel } from "../../../../mongo/schema";
 import getUser from "../../../utils/getUser";
 import { User } from "../../../../mongo/interface";
