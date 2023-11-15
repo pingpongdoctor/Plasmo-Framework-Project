@@ -1,8 +1,8 @@
-import Link from "next/link";
 import getUser from "../utils/getUser";
 import TranslationForm from "@/_components/TranslationForm";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import TranslationList from "@/_components/TranslationList";
+import LogoutButtonComponent from "@/_components/LogoutButtonComponent";
 
 export const getServerSideProps = withPageAuthRequired({
   async getServerSideProps(context: any) {
@@ -38,9 +38,8 @@ export default function Home({
           <h1 className="plasmo-text-red-400 plasmo-font-roboto">
             Translate Text
           </h1>
-          <Link href={`/api/auth/logout`}>Logout</Link>
+          <LogoutButtonComponent />
         </div>
-
         <p className="plasmo-mb-4">Welcome back {user.name}</p>
         <p className="plasmo-font-bold">Your translations are</p>
         <TranslationList user={user} />
