@@ -18,7 +18,7 @@ export default withApiAuthRequired(async function handler(
   }
 
   const { id } = req.query;
-  console.log(id);
+
   if (!id) {
     return res.status(400).json({
       message: "Required data is missing in the request body",
