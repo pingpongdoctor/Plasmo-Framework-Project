@@ -24,6 +24,9 @@ export default function TranslationList({
 }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const handleUpdateIsOpen = function (value: boolean) {
+    setIsOpen(value);
+  };
   return (
     <div>
       {" "}
@@ -90,7 +93,12 @@ export default function TranslationList({
                       Update
                     </button>
                   </td>
-                  {isOpen && <UpdateModalBox translation={translation} />}
+                  {isOpen && (
+                    <UpdateModalBox
+                      translation={translation}
+                      handleUpdateIsOpen={handleUpdateIsOpen}
+                    />
+                  )}
                 </tr>
               )
             )}

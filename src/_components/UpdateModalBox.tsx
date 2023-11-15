@@ -2,12 +2,18 @@ import React, { ChangeEvent, FormEvent } from "react";
 import { Translation } from "../../mongo/interface";
 import { useState } from "react";
 import updateTranslation from "@/utils/updateTranslation";
+import { useRouter } from "next/router";
+
+interface Props {
+  translation: Translation & { _id: string };
+  handleUpdateIsOpen: (value: boolean) => void;
+}
 
 export default function UpdateModalBox({
   translation,
-}: {
-  translation: Translation & { _id: string };
-}) {
+  handleUpdateIsOpen,
+}: Props) {
+  const router = useRouter();
   const [text, setText] = useState<string>(translation.originalContent);
   const [from, setFrom] = useState<"en" | "fr" | "es">(translation.from);
   const [to, setTo] = useState<"en" | "fr" | "es">(translation.to);
@@ -18,13 +24,26 @@ export default function UpdateModalBox({
 
   const handleSubmit = async function (e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await updateTranslation(from, to, text, translatedText, translation._id);
-    if (isChanged && text && translatedText) {
+    if (!isChanged) {
+      alert("Please change at least one field");
+      return;
     }
+
+    if (!text || !translatedText) {
+      alert("Please add both text and translated text");
+      return;
+    }
+
+    await updateTranslation(from, to, text, translatedText, translation._id);
+    handleUpdateIsOpen(false);
+    router.push("/");
   };
   return (
-    <div className="plasmo-flex plasmo-justify-center plasmo-items-center plasmo-w-[100vw] plasmo-h-[100vh] plasmo-bg-slate-300 plasmo-rounded-md plasmo-fixed plasmo-top-0 plasmo-left-0">
-      <form className="plasmo-w-[30vw] plasmo-relative plasmo-flex plasmo-flex-col plasmo-gap-8 plasmo-p-10 plasmo-bg-blue-500 plasmo-rounded-md">
+    <div className="plasmo-flex plasmo-justify-center plasmo-items-center plasmo-w-[100vw] plasmo-h-[100vh] plasmo-bg-slate-200 plasmo-bg-opacity-20 plasmo-backdrop-blur plasmo-rounded-md plasmo-fixed plasmo-top-0 plasmo-left-0">
+      <form
+        onSubmit={handleSubmit}
+        className="plasmo-w-[30vw] plasmo-relative plasmo-flex plasmo-flex-col plasmo-gap-8 plasmo-p-10 plasmo-bg-blue-500 plasmo-rounded-md"
+      >
         <select
           id="to"
           className="plasmo-border plasmo-border-black focus:plasmo-outline-none plasmo-rounded-md"
@@ -78,7 +97,15 @@ export default function UpdateModalBox({
             value={translatedText}
           />
         </label>
-        <div className="plasmo-absolute plasmo-top-2 plasmo-right-2 plasmo-font-bold plasmo-text-xl">
+        <button className="plasmo-bg-black plasmo-rounded-md plasmo-p-2 plasmo-w-[50%] plasmo-mx-auto plasmo-text-white plasmo-font-semibold">
+          Update
+        </button>
+        <div
+          onClick={() => {
+            handleUpdateIsOpen(false);
+          }}
+          className="plasmo-absolute plasmo-top-2 plasmo-right-2 plasmo-font-bold plasmo-text-xl plasmo-cursor-pointer"
+        >
           X
         </div>
       </form>
